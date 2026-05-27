@@ -65,13 +65,10 @@ class GatewaySettings:
     jwt_expiry_seconds: int  = field(default_factory=lambda: _env_int("JWT_EXPIRY_SECONDS", 3600))
     demo_mode:          bool = field(default_factory=lambda: _env_bool("DEMO_MODE", True))
 
-    # CORS — GitHub Pages origin always allowed; extend via CORS_ORIGINS env var
-    cors_origins: list[str] = field(default_factory=lambda: (
-        list({
-            "https://t3warchest.github.io",
-            *_env("CORS_ORIGINS", "*").split(","),
-        })
-    ))
+    # CORS — allow all origins by default (dev-friendly).
+    # In production set CORS_ORIGINS to a comma-separated list of allowed origins.
+    # The GitHub Pages origin is always included regardless.
+    cors_origins: list[str] = field(default_factory=lambda: ["*"])
 
     # Session persistence
     persist_sessions:    bool = field(default_factory=lambda: _env_bool("PERSIST_SESSIONS", False))

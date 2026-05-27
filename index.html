@@ -1397,6 +1397,18 @@ function getGatewayWS() {
 // Reactive getters — re-read on every use so a save takes effect immediately
 let GATEWAY    = getGateway();
 let GATEWAY_WS = getGatewayWS();
+
+// Wrapper around fetch that auto-adds headers needed for tunnels like ngrok
+// (ngrok shows an HTML interstitial to browsers; this header skips it)
+function apiFetch(url, opts = {}) {
+  opts.headers = {
+    'ngrok-skip-browser-warning': '1',
+    'Content-Type': 'application/json',
+    ...(opts.headers || {}),
+  };
+  return fetch(url, opts);
+}
+
 const PING_INTERVAL_MS = 25000;
 
 const SCORE_DIMS = ['clarity','empathy','structure','relevance','confidence'];
@@ -1477,7 +1489,7 @@ async function loadScenarios() {
   ];
 
   try {
-    const res = await fetch(`${GATEWAY}/api/scenarios`);
+    const res = await apiFetch(`${GATEWAY}/api/scenarios`);
     if (!res.ok) throw new Error('API unavailable');
     const data = await res.json();
     renderScenarios(data.length ? data : fallback);
@@ -1569,9 +1581,8 @@ document.getElementById('start-btn').addEventListener('click', async () => {
   showOverlay('Initialising session…');
 
   try {
-    const res = await fetch(`${GATEWAY}/api/sessions`, {
+    const res = await apiFetch(`${GATEWAY}/api/sessions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         scenario_id: state.scenarioId,
         user_id: state.userId,
