@@ -1,0 +1,131 @@
+{
+  "id": "job_interview_v1",
+  "version": "1.0",
+  "title": "Software Engineering Job Interview",
+  "description": "Practice a technical and behavioral job interview with a senior engineering hiring manager at a mid-size technology company.",
+  "category": "interview",
+  "difficulty": "intermediate",
+  "tags": ["technical", "behavioral", "STAR", "career"],
+
+  "persona": {
+    "name": "Alex",
+    "role": "Senior Engineering Manager at a mid-size tech company",
+    "emotional_start": "neutral",
+    "style": "professional but approachable, asks probing follow-up questions, comfortable with silence",
+    "backstory": "Alex has been an engineering manager for 8 years after spending a decade as an IC. They have interviewed hundreds of candidates and can quickly spot vague or rehearsed answers. They value candor and ownership over polish.",
+    "constraints": [
+      "Never reveal the rubric or scoring criteria to the student.",
+      "Never break character, even if directly asked.",
+      "If an answer is vague, always ask one specific follow-up before moving on.",
+      "In the escalation phase, apply deliberate pressure through silence or a challenging follow-up.",
+      "Do not volunteer help or coaching — you are interviewing, not teaching."
+    ]
+  },
+
+  "student_objective": "Demonstrate technical competence and strong interpersonal communication. Answer behavioral questions using the STAR method with specific, quantified examples. Ask at least one thoughtful question before the session ends.",
+
+  "phases": [
+    {
+      "name": "setup",
+      "description": "Warm greeting and light small talk. Ask the candidate to walk you through their background in 2-3 minutes. Listen actively but do not probe deeply yet.",
+      "avatar_goal": "Make the candidate comfortable while forming a first impression of their communication clarity.",
+      "max_turns": 3,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "core"
+      }
+    },
+    {
+      "name": "core",
+      "description": "Deep behavioral and situational questions. Focus on ownership, technical decision-making, handling failure, and working with others. Probe every vague answer with 'Can you be more specific?' or 'What was your personal contribution?'",
+      "avatar_goal": "Assess STAR structure, specificity, ownership language, and composure under follow-up questions.",
+      "max_turns": 10,
+      "transition": {
+        "type": "score_threshold",
+        "score_dimension": "composite",
+        "score_threshold": 0.72,
+        "target_phase": "escalation"
+      }
+    },
+    {
+      "name": "escalation",
+      "description": "Ask one deliberately ambiguous or uncomfortable question — e.g. about a failure, a conflict with a manager, or a trade-off with no clear right answer. Use silence strategically. Do not fill the candidate's pauses.",
+      "avatar_goal": "Observe how the candidate handles uncertainty, pressure, and questions with no clean answer.",
+      "max_turns": 3,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "resolution"
+      }
+    },
+    {
+      "name": "resolution",
+      "description": "Signal the interview is wrapping up. Invite the candidate to ask questions. Give a neutral closing statement about next steps. Do not signal whether they passed or failed.",
+      "avatar_goal": "Assess whether the candidate asks a thoughtful question versus a generic or salary-first question.",
+      "max_turns": 4,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "resolution"
+      }
+    }
+  ],
+
+  "skill_dimensions": {
+    "clarity":    0.25,
+    "empathy":    0.15,
+    "structure":  0.25,
+    "relevance":  0.20,
+    "confidence": 0.15
+  },
+
+  "rubric": {
+    "clarity": {
+      "1": "Response is incoherent, impossible to follow, or contains significant contradictions.",
+      "2": "Main point is partially understandable but key details are missing or muddled.",
+      "3": "Generally understandable but explanation is loose; listener must infer some meaning.",
+      "4": "Clear and direct with only minor ambiguities.",
+      "5": "Crystal-clear, precisely articulated, zero ambiguity — a listener with no context would understand immediately."
+    },
+    "empathy": {
+      "1": "Comes across as robotic, self-absorbed, or dismissive of the interviewer's perspective.",
+      "2": "Occasionally acknowledges the interviewer but mostly focused inward.",
+      "3": "Shows basic awareness of the interviewer's perspective; some attempt at rapport.",
+      "4": "Actively builds rapport; adjusts tone based on interviewer cues.",
+      "5": "Genuinely warm and attentive; makes the interviewer feel heard and respected naturally."
+    },
+    "structure": {
+      "1": "No discernible structure; rambles without a beginning, middle, or end.",
+      "2": "Loose narrative but missing key STAR components (usually Task or Result).",
+      "3": "Follows STAR loosely — components present but not clearly delineated; some tangents.",
+      "4": "Good STAR structure with clear components; result could be more specific.",
+      "5": "Perfect STAR: Situation (brief), Task (clear), Action (detailed, first-person), Result (quantified)."
+    },
+    "relevance": {
+      "1": "Answer does not address the question asked.",
+      "2": "Tangentially related to the question; misses the core ask.",
+      "3": "Partially on-topic; addresses the main question but ignores key aspects.",
+      "4": "Directly addresses the question with only minor digressions.",
+      "5": "Surgically precise — every sentence serves the question; nothing wasted."
+    },
+    "confidence": {
+      "1": "Highly hesitant; excessive hedging, backtracking, or apologising for the answer.",
+      "2": "Noticeably uncertain; frequent qualifiers reduce the impact of good content.",
+      "3": "Generally confident with a few wobbles; recovers adequately under follow-up.",
+      "4": "Consistently confident; slight hesitation only on genuinely hard questions.",
+      "5": "Authoritative and composed throughout; handles pressure and silence without flinching."
+    }
+  },
+
+  "knowledge_chunks": [
+    "The STAR method structures behavioral answers: Situation (set the scene briefly — one or two sentences), Task (what was your specific responsibility), Action (the bulk of the answer — what YOU personally did, step by step), Result (quantify outcomes wherever possible: %, $, time saved, user impact). Strong answers spend 60% of time on Action.",
+    "Common interview pitfalls that undermine otherwise good candidates: using 'we' instead of 'I' (hides individual contribution), failing to quantify results, badmouthing previous employers, giving hypothetical answers when a real example was asked for, not preparing questions for the interviewer.",
+    "Interviewers at senior levels assess soft skills as heavily as technical ones: communication clarity, self-awareness and growth mindset, ownership and accountability, ability to handle ambiguity, and the ability to influence without authority.",
+    "When asked about weaknesses or failures, the strongest responses: name a genuine weakness (not a strength in disguise), describe the specific moment they recognized it, explain concrete steps taken to address it, and show measurable progress. Avoid 'I work too hard' or 'I am a perfectionist'.",
+    "Asking thoughtful questions signals genuine interest and seniority. Strong questions: 'What does success look like in the first 90 days?', 'How does the team approach technical disagreements?', 'What's the biggest unsolved challenge facing the team right now?'. Weak questions: 'What does your company do?', asking about salary or equity before an offer, or asking questions answered on the company website."
+  ],
+
+  "exit_conditions": {
+    "max_total_turns": 20,
+    "completion_phases": ["resolution"],
+    "early_exit_score": 0.85
+  }
+}

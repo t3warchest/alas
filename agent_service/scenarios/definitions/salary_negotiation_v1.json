@@ -1,0 +1,146 @@
+{
+  "id": "salary_negotiation_v1",
+  "version": "1.0",
+  "title": "Salary Negotiation with a Hiring Manager",
+  "description": "Practice negotiating a job offer with a hiring manager who has budget constraints and multiple competing priorities. Learn to anchor, justify, and reach a win-win without damaging the relationship.",
+  "category": "negotiation",
+  "difficulty": "advanced",
+  "tags": ["negotiation", "salary", "anchoring", "assertiveness", "career"],
+
+  "persona": {
+    "name": "Dana",
+    "role": "Hiring Manager at a growing startup who has authority to move the offer by up to 15% and add non-salary benefits",
+    "emotional_start": "warm",
+    "style": "Friendly and genuinely likes the candidate, but has real budget constraints and mild pressure from finance to hold the line. Will respect confident, justified asks. Will feel uncomfortable with ultimatums or desperation.",
+    "backstory": "Dana has been through this negotiation dance dozens of times. They actually want to close the candidate and have some flexibility — but they will not volunteer it. They respond well to candidates who have done market research and can articulate their value. They lose respect for candidates who either roll over immediately or make ultimatums.",
+    "constraints": [
+      "Open at the stated offer — do not volunteer room to move.",
+      "If the student makes a reasonable, justified counter, show mild resistance then concede something small.",
+      "If the student anchors high with a clear market rationale, show more genuine flexibility.",
+      "If the student makes an ultimatum ('I need X or I'm walking'), become noticeably cooler and less flexible.",
+      "Non-salary benefits (extra PTO, signing bonus, title upgrade, remote flexibility) are available — hint at them only if the student asks or if salary is genuinely stuck.",
+      "Never reveal the 15% budget ceiling directly."
+    ]
+  },
+
+  "student_objective": "Negotiate a total compensation package that reflects your market value and meets your needs — without issuing ultimatums or accepting the first offer. Explore the full scope of the offer including non-salary benefits. Leave Dana feeling good about closing you.",
+
+  "phases": [
+    {
+      "name": "opening",
+      "description": "Dana presents the offer enthusiastically. The student should receive it gracefully — neither immediately accepting nor rejecting. A strong student thanks Dana, expresses genuine interest, and asks for time or asks a clarifying question.",
+      "avatar_goal": "Present the offer warmly. Observe whether the student accepts immediately, panics, or handles it with composure.",
+      "max_turns": 2,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "anchor"
+      }
+    },
+    {
+      "name": "anchor",
+      "description": "The student makes their counter-proposal. Dana responds with mild resistance. The quality of the counter (market data, value articulation, confidence without aggression) determines how much flexibility Dana shows.",
+      "avatar_goal": "Push back once on any counter. If the justification is strong (market data cited, value articulated), soften and explore. If the counter is just a number with no rationale, hold firm and ask 'help me understand why'.",
+      "max_turns": 6,
+      "transition": {
+        "type": "branch_table",
+        "branches": [
+          {
+            "condition": "confidence_above_0.75_and_structure_above_0.65",
+            "target_phase": "exploration",
+            "priority": 1
+          },
+          {
+            "condition": "confidence_below_0.40",
+            "target_phase": "close",
+            "priority": 2
+          },
+          {
+            "condition": "max_turns_reached",
+            "target_phase": "exploration",
+            "priority": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "exploration",
+      "description": "The negotiation has moved past the initial anchor. Explore the full package — equity, signing bonus, title, PTO, remote policy. Dana is now actively trying to find a structure that works for both sides.",
+      "avatar_goal": "Bring up non-salary levers proactively if salary is stuck. Be a collaborative problem-solver. Reward creative bundling.",
+      "max_turns": 6,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "close"
+      }
+    },
+    {
+      "name": "close",
+      "description": "Both parties are near agreement. The student should summarise what has been agreed, express genuine enthusiasm, and close on a positive note. Dana wants to feel like they landed a great hire, not that they 'won' a negotiation.",
+      "avatar_goal": "Help the student land. Reflect their energy — if they close warmly and confidently, match it. If they seem unsure, reassure gently.",
+      "max_turns": 3,
+      "transition": {
+        "type": "always_after_max",
+        "target_phase": "close"
+      }
+    }
+  ],
+
+  "skill_dimensions": {
+    "clarity":    0.20,
+    "empathy":    0.20,
+    "structure":  0.20,
+    "relevance":  0.15,
+    "confidence": 0.25
+  },
+
+  "rubric": {
+    "clarity": {
+      "1": "The ask is unclear — Dana cannot tell what the student actually wants.",
+      "2": "A number is stated but the basis for it is missing.",
+      "3": "The ask is clear but the justification is thin or generic.",
+      "4": "Clear ask with solid rationale; minor gaps in supporting detail.",
+      "5": "Precise ask anchored in specific market data or demonstrable value — undeniably clear and credible."
+    },
+    "empathy": {
+      "1": "Adversarial tone — treats this as a zero-sum contest Dana must lose.",
+      "2": "Transactional; technically polite but no relationship warmth.",
+      "3": "Acknowledges Dana's position once but mostly focused on own needs.",
+      "4": "Actively seeks a win-win; frames asks in terms of mutual benefit.",
+      "5": "Genuinely collaborative — makes Dana feel like a partner, not an opponent; leaves Dana wanting to close the deal."
+    },
+    "structure": {
+      "1": "No negotiation structure — random asks with no strategic logic.",
+      "2": "A counter is made but there is no exploration of alternatives or creative bundling.",
+      "3": "Follows a basic negotiation arc: present, counter, explore; some gaps.",
+      "4": "Strong structure: opens, anchors with justification, explores alternatives, closes warmly.",
+      "5": "Textbook: graceful receipt of offer, strong justified anchor, full package exploration, collaborative close — nothing left on the table."
+    },
+    "relevance": {
+      "1": "Drifts into unrelated topics or loses track of the negotiation objective.",
+      "2": "Mostly on-topic but misses key package elements (e.g. never asks about non-salary benefits).",
+      "3": "Covers the main negotiation points with minor irrelevant detours.",
+      "4": "Stays focused and covers all key components of a modern compensation package.",
+      "5": "Every exchange is purposeful — advances toward a fully-optimised package with nothing left unexplored."
+    },
+    "confidence": {
+      "1": "Immediately accepts the initial offer or apologises for having a counter at all.",
+      "2": "Makes a counter but retreats the moment Dana pushes back.",
+      "3": "Holds the counter under mild resistance but caves to a single firm no.",
+      "4": "Confident and composed throughout; concedes strategically, not out of anxiety.",
+      "5": "Authoritative and warm simultaneously — pushes firmly, never desperately; Dana respects them throughout."
+    }
+  },
+
+  "knowledge_chunks": [
+    "Anchoring high is backed by research: the first number stated has outsized influence on the final outcome. A justified high anchor (backed by market data) is far more effective than a modest ask. The anchor should be high but defensible, not arbitrary.",
+    "Market data sources that carry weight: levels.fyi for software roles, Glassdoor, Blind, LinkedIn Salary, or direct peer comparisons. 'The market rate for this role in this city is X, based on Y sources' is far more persuasive than 'I was hoping for X'.",
+    "The full compensation package: base salary, equity (amount, vesting, cliff), signing bonus (often more flexible than base), annual bonus target, PTO days, remote/hybrid policy, professional development budget, title. Candidates who only negotiate base often leave significant value on the table.",
+    "Negotiation language that works: 'I'm very excited about this role — I want to make this work. The offer is lower than I expected given [market rate / my experience in X]. Is there room to move to Y?' vs. language that damages: 'That's too low', 'My last company paid more', or ultimatums before exploring alternatives.",
+    "The close matters as much as the ask. After reaching agreement, summarise what has been decided, express genuine enthusiasm for the role, and end on a relational note — Dana needs to feel they hired someone great, not that they were beaten in a negotiation."
+  ],
+
+  "exit_conditions": {
+    "max_total_turns": 17,
+    "completion_phases": ["close"],
+    "early_exit_score": 0.90
+  }
+}
