@@ -1064,6 +1064,108 @@
 
   /* ── UTILS ── */
   .hidden { display: none !important; }
+
+  /* ── SETTINGS MODAL ── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,15,20,0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+  }
+
+  .modal-backdrop.hidden { display: none; }
+
+  .modal-box {
+    background: var(--ink-2);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 18px;
+  }
+
+  .modal-label {
+    font-size: 12.5px;
+    color: var(--text-2);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .modal-input {
+    width: 100%;
+    background: var(--ink-3);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius);
+    padding: 9px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-1);
+    outline: none;
+    transition: border-color var(--speed);
+    margin-bottom: 14px;
+  }
+
+  .modal-input:focus { border-color: var(--amber); }
+
+  .modal-hint {
+    font-size: 11.5px;
+    color: var(--text-3);
+    font-family: var(--mono);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .modal-hint code {
+    background: var(--ink-3);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--amber);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* settings gear button */
+  .settings-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-3);
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: var(--mono);
+    transition: border-color var(--speed), color var(--speed);
+  }
+
+  .settings-btn:hover { border-color: var(--border-hi); color: var(--text-2); }
+
+  .settings-btn svg { width: 14px; height: 14px; }
+
+  .lobby-inner { position: relative; }
 </style>
 </head>
 <body>
@@ -1071,6 +1173,15 @@
 <!-- ═══════════════════════════════════════════════════════ LOBBY ═══ -->
 <div class="screen active" id="lobby">
   <div class="lobby-inner">
+
+    <!-- Settings gear -->
+    <button class="settings-btn" id="settings-btn" title="Configure backend URL">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 10a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M13.3 6.7l-.8-.5a5.1 5.1 0 000-1.4l.8-.5a.6.6 0 00.2-.8l-1-1.7a.6.6 0 00-.8-.2l-.9.5a5 5 0 00-1.2-.7V1a.6.6 0 00-.6-.6H7a.6.6 0 00-.6.6v1a5 5 0 00-1.2.7l-.9-.5a.6.6 0 00-.8.2l-1 1.7a.6.6 0 00.2.8l.8.5a5.1 5.1 0 000 1.4l-.8.5a.6.6 0 00-.2.8l1 1.7c.2.3.5.4.8.2l.9-.5a5 5 0 001.2.7v1c0 .3.3.6.6.6h2c.3 0 .6-.3.6-.6v-1a5 5 0 001.2-.7l.9.5c.3.2.6.1.8-.2l1-1.7a.6.6 0 00-.2-.8z" stroke="currentColor" stroke-width="1.3"/>
+      </svg>
+      backend
+    </button>
 
     <div class="logo-mark">
       <div class="logo-hex"><div class="logo-hex-inner"></div></div>
@@ -1234,6 +1345,30 @@
   </div>
 </div>
 
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop hidden" id="settings-modal">
+  <div class="modal-box">
+    <div class="modal-title">⚙ Backend connection</div>
+
+    <label class="modal-label" for="gateway-url-input">Gateway URL</label>
+    <input class="modal-input" id="gateway-url-input" type="url"
+           placeholder="https://xxxx-xx-xx-xx-xx.ngrok-free.app" autocomplete="off" spellcheck="false" />
+
+    <p class="modal-hint">
+      The frontend (GitHub Pages) must reach your locally-running gateway over <strong>HTTPS</strong>.<br><br>
+      Run this on your machine to create a free tunnel:<br>
+      <code>ngrok http 8001</code><br><br>
+      Then paste the <code>https://…ngrok-free.app</code> URL above and click Save.
+      The value is stored in your browser so you only need to set it once per ngrok session.
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" id="settings-cancel-btn">Cancel</button>
+      <button class="start-btn" id="settings-save-btn" style="padding:9px 20px;font-size:13px">Save &amp; reconnect</button>
+    </div>
+  </div>
+</div>
+
 <!-- STATUS OVERLAY -->
 <div class="status-overlay" id="status-overlay">
   <div class="status-spinner"></div>
@@ -1249,14 +1384,19 @@
 // ═══════════════════════════════════════════════════════════════════
 
 // ── Backend connection ──────────────────────────────────────────────────────
-// Set GATEWAY to your deployed gateway URL (e.g. 'https://myserver.com:8001').
-// Locally, keep 'http://localhost:8001'.
-// GATEWAY_WS must use ws:// for http:// origins and wss:// for https:// ones.
-const GATEWAY    = (window.ALAS_GATEWAY_URL    || 'http://localhost:8001').replace(/\/$/, '');
-const GATEWAY_WS = (window.ALAS_GATEWAY_WS_URL || GATEWAY)
-  .replace(/^https:\/\//, 'wss://')
-  .replace(/^http:\/\//, 'ws://')
-  .replace(/\/$/, '');
+// Reads from localStorage so the user can configure it via the ⚙ button
+// without touching code. Falls back to localhost for local dev.
+function getGateway() {
+  return (localStorage.getItem('alas_gateway_url') || 'http://localhost:8001').replace(/\/$/, '');
+}
+function getGatewayWS() {
+  return getGateway()
+    .replace(/^https:\/\//, 'wss://')
+    .replace(/^http:\/\//, 'ws://');
+}
+// Reactive getters — re-read on every use so a save takes effect immediately
+let GATEWAY    = getGateway();
+let GATEWAY_WS = getGatewayWS();
 const PING_INTERVAL_MS = 25000;
 
 const SCORE_DIMS = ['clarity','empathy','structure','relevance','confidence'];
@@ -2037,6 +2177,43 @@ function scoreColor(v) {
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// SETTINGS MODAL
+// ═══════════════════════════════════════════════════════════════════
+
+function openSettings() {
+  document.getElementById('gateway-url-input').value = getGateway();
+  document.getElementById('settings-modal').classList.remove('hidden');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.add('hidden');
+}
+
+document.getElementById('settings-btn').addEventListener('click', openSettings);
+document.getElementById('settings-cancel-btn').addEventListener('click', closeSettings);
+
+document.getElementById('settings-save-btn').addEventListener('click', () => {
+  const raw = document.getElementById('gateway-url-input').value.trim();
+  if (!raw) return;
+  // Basic validation
+  if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
+    toast('URL must start with http:// or https://', 'error');
+    return;
+  }
+  localStorage.setItem('alas_gateway_url', raw.replace(/\/$/, ''));
+  GATEWAY    = getGateway();
+  GATEWAY_WS = getGatewayWS();
+  closeSettings();
+  toast('Backend URL saved — reloading scenarios…', 'success');
+  loadScenarios();
+});
+
+// Close modal on backdrop click
+document.getElementById('settings-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('settings-modal')) closeSettings();
+});
 
 // ═══════════════════════════════════════════════════════════════════
 // INIT
