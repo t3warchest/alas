@@ -51,14 +51,26 @@ class GatewaySettings:
     agent_base_url: str = field(default_factory=lambda: _env("AGENT_SERVICE_URL", "http://localhost:8000"))
     agent_ws_url:   str = field(default_factory=lambda: _env("AGENT_SERVICE_WS_URL", "ws://localhost:8000"))
 
+    # Public URL advertised to clients for WebSocket connections
+    # Set GATEWAY_PUBLIC_URL to your deployed domain (e.g. https://myserver.com)
+    # when running behind a reverse proxy or on a cloud host.
+    # Defaults to the local address so development works out of the box.
+    gateway_public_url: str = field(default_factory=lambda: _env(
+        "GATEWAY_PUBLIC_URL",
+        f"http://localhost:{_env_int('GATEWAY_PORT', 8001)}",
+    ))
+
     # Auth
     jwt_secret:         str  = field(default_factory=lambda: _env("JWT_SECRET", secrets.token_hex(32)))
     jwt_expiry_seconds: int  = field(default_factory=lambda: _env_int("JWT_EXPIRY_SECONDS", 3600))
     demo_mode:          bool = field(default_factory=lambda: _env_bool("DEMO_MODE", True))
 
-    # CORS
+    # CORS — GitHub Pages origin always allowed; extend via CORS_ORIGINS env var
     cors_origins: list[str] = field(default_factory=lambda: (
-        _env("CORS_ORIGINS", "*").split(",")
+        list({
+            "https://t3warchest.github.io",
+            *_env("CORS_ORIGINS", "*").split(","),
+        })
     ))
 
     # Session persistence

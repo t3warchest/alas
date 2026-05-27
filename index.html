@@ -1248,8 +1248,15 @@
 // CONSTANTS
 // ═══════════════════════════════════════════════════════════════════
 
-const GATEWAY = 'http://localhost:8001';
-const GATEWAY_WS = 'ws://localhost:8001';
+// ── Backend connection ──────────────────────────────────────────────────────
+// Set GATEWAY to your deployed gateway URL (e.g. 'https://myserver.com:8001').
+// Locally, keep 'http://localhost:8001'.
+// GATEWAY_WS must use ws:// for http:// origins and wss:// for https:// ones.
+const GATEWAY    = (window.ALAS_GATEWAY_URL    || 'http://localhost:8001').replace(/\/$/, '');
+const GATEWAY_WS = (window.ALAS_GATEWAY_WS_URL || GATEWAY)
+  .replace(/^https:\/\//, 'wss://')
+  .replace(/^http:\/\//, 'ws://')
+  .replace(/\/$/, '');
 const PING_INTERVAL_MS = 25000;
 
 const SCORE_DIMS = ['clarity','empathy','structure','relevance','confidence'];

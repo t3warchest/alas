@@ -110,7 +110,12 @@ def make_sessions_router(session_store: SessionStore) -> APIRouter:
         )
         session_store.create(gw_session)
 
-        ws_url = f"ws://localhost:{_settings.port}/ws/{session_id}"
+        # Build the WebSocket URL from the public base URL so it works
+        # both locally and when the gateway is deployed behind a proxy.
+        public_base = _settings.gateway_public_url.rstrip("/")
+        ws_scheme   = "wss" if public_base.startswith("https") else "ws"
+        ws_host     = public_base.removeprefix("https://").removeprefix("http://")
+        ws_url      = f"{ws_scheme}://{ws_host}/ws/{session_id}"
 
         return CreateSessionResponse(
             session_id=session_id,

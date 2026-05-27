@@ -29,6 +29,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from gateway.config import get_gateway_settings
 from gateway.middleware.logging import RequestLoggingMiddleware
@@ -102,6 +103,15 @@ def create_app() -> FastAPI:
     # ── REST routers ──────────────────────────────────────────────────────
     app.include_router(auth_router)
     app.include_router(make_sessions_router(session_store))
+
+    # ── Frontend redirect ─────────────────────────────────────────────────
+    @app.get("/", include_in_schema=False)
+    async def root_redirect():
+        """Redirect bare root requests to the hosted frontend on GitHub Pages."""
+        return RedirectResponse(
+            url="https://t3warchest.github.io/alas/",
+            status_code=302,
+        )
 
     # ── Gateway health (independent of agent service) ─────────────────────
     @app.get("/health", tags=["infra"])
